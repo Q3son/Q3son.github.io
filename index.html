@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edson Subia — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1318;
+    --surface2: #131b22;
+    --accent: #00d4ff;
+    --accent2: #7b61ff;
+    --accent3: #00ff9d;
+    --text: #e8f0f7;
+    --muted: #6b8499;
+    --border: rgba(0,212,255,0.12);
+    --glow: 0 0 40px rgba(0,212,255,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed; width: 8px; height: 8px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.1s ease;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed; width: 32px; height: 32px;
+    border: 1px solid rgba(0,212,255,0.4); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transition: transform 0.15s ease, width 0.2s, height 0.2s;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1; opacity: 0.4;
+  }
+
+  /* GRID LINES */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: linear-gradient(180deg, rgba(8,12,16,0.95) 0%, transparent 100%);
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 120px 40px 80px;
+    position: relative; z-index: 2;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .hero-content { max-width: 800px; }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,212,255,0.08); border: 1px solid var(--border);
+    padding: 6px 14px; border-radius: 2px;
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 32px;
+  }
+
+  .hero-tag::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--accent3); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 800; line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  h1 .line1 { color: var(--text); display: block; }
+  h1 .line2 {
+    display: block;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 0.85rem; color: var(--muted);
+    letter-spacing: 0.08em; margin: 24px 0 40px;
+    line-height: 1.8;
+  }
+
+  .hero-sub span { color: var(--accent); }
+
+  .hero-badges {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 48px;
+  }
+
+  .badge {
+    padding: 6px 14px; border-radius: 2px;
+    font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid;
+  }
+
+  .badge-blue { border-color: rgba(0,212,255,0.3); color: var(--accent); background: rgba(0,212,255,0.05); }
+  .badge-purple { border-color: rgba(123,97,255,0.3); color: var(--accent2); background: rgba(123,97,255,0.05); }
+  .badge-green { border-color: rgba(0,255,157,0.3); color: var(--accent3); background: rgba(0,255,157,0.05); }
+
+  .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 28px; text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    transition: all 0.2s; border-radius: 2px;
+  }
+
+  .btn-primary {
+    background: var(--accent); color: var(--bg);
+    font-weight: 400;
+  }
+  .btn-primary:hover { background: #fff; box-shadow: 0 0 30px rgba(0,212,255,0.4); }
+
+  .btn-secondary {
+    border: 1px solid var(--border); color: var(--text);
+    background: transparent;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 2; padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border); max-width: 80px;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    letter-spacing: -0.02em; margin-bottom: 60px;
+  }
+
+  /* STATS */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); margin-bottom: 80px;
+  }
+
+  .stat {
+    background: var(--surface); padding: 32px 24px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; display: block;
+  }
+
+  .stat-label { font-size: 0.65rem; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; margin-top: 6px; }
+
+  /* PROJECTS GRID */
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 2px; background: var(--border);
+  }
+
+  .project-card {
+    background: var(--surface); padding: 36px;
+    transition: background 0.2s;
+    position: relative; overflow: hidden;
+  }
+
+  .project-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .project-card:hover { background: var(--surface2); }
+  .project-card:hover::before { transform: scaleX(1); }
+
+  .project-card.featured {
+    grid-column: span 2;
+    background: linear-gradient(135deg, var(--surface) 0%, rgba(0,212,255,0.04) 100%);
+  }
+
+  @media (max-width: 768px) { .project-card.featured { grid-column: span 1; } }
+
+  .project-year {
+    font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted);
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+
+  .project-title {
+    font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700;
+    margin-bottom: 8px; line-height: 1.2;
+  }
+
+  .project-role {
+    font-size: 0.7rem; color: var(--accent); letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+
+  .project-desc {
+    font-size: 0.8rem; color: var(--muted); line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+
+  .tag {
+    padding: 3px 10px; border-radius: 1px;
+    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.15);
+    color: var(--muted);
+  }
+
+  .project-award {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,255,157,0.08); border: 1px solid rgba(0,255,157,0.2);
+    padding: 8px 14px; border-radius: 2px; margin-bottom: 20px;
+    font-size: 0.68rem; letter-spacing: 0.08em; color: var(--accent3);
+  }
+
+  .project-links { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .project-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); text-decoration: none;
+    border-bottom: 1px solid rgba(0,212,255,0.2);
+    padding-bottom: 2px; transition: border-color 0.2s;
+  }
+  .project-link:hover { border-color: var(--accent); }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2px; background: var(--border);
+  }
+
+  .skill-group {
+    background: var(--surface); padding: 28px;
+  }
+
+  .skill-group-title {
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 16px;
+  }
+
+  .skill-list {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+
+  .skill-item {
+    padding: 4px 10px; border-radius: 1px;
+    font-size: 0.65rem; letter-spacing: 0.06em;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  /* EXPERIENCE */
+  .exp-list { display: flex; flex-direction: column; gap: 2px; background: var(--border); }
+
+  .exp-item {
+    background: var(--surface); padding: 28px 36px;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 16px; align-items: start;
+    transition: background 0.2s;
+  }
+  .exp-item:hover { background: var(--surface2); }
+
+  .exp-title {
+    font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .exp-org { font-size: 0.75rem; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 8px; }
+  .exp-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.7; }
+  .exp-date { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; white-space: nowrap; }
+
+  /* CONTACT */
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+    background: var(--border);
+  }
+
+  @media (max-width: 600px) { .contact-grid { grid-template-columns: 1fr; } }
+
+  .contact-item {
+    background: var(--surface); padding: 32px;
+    display: flex; flex-direction: column; gap: 8px;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .contact-item:hover { background: var(--surface2); }
+
+  .contact-label { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .contact-value { font-family: 'Syne', sans-serif; font-size: 0.95rem; color: var(--text); }
+  .contact-arrow { font-size: 0.7rem; color: var(--accent); margin-top: 8px; }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 2; text-align: center;
+    padding: 40px; border-top: 1px solid var(--border);
+    font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted);
+  }
+
+  /* SCROLL ANIMATIONS */
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* GLOW ORBS */
+  .orb {
+    position: fixed; border-radius: 50%;
+    filter: blur(80px); pointer-events: none; z-index: 0;
+  }
+  .orb1 { width: 400px; height: 400px; background: rgba(0,212,255,0.06); top: -100px; right: -100px; }
+  .orb2 { width: 300px; height: 300px; background: rgba(123,97,255,0.06); bottom: 20%; left: -80px; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<nav>
+  <div class="nav-logo">Q3son_04</div>
+  <div class="nav-links">
+    <a href="#proyectos">Proyectos</a>
+    <a href="#skills">Skills</a>
+    <a href="#experiencia">Exp.</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Disponible para colaborar</div>
+    <h1>
+      <span class="line1">EDSON</span>
+      <span class="line2">SUBIA</span>
+    </h1>
+    <p class="hero-sub">
+      Full Stack Developer  ·  IoT & Automatización  ·  Investigador <span>CiTeSoft UNSA</span><br>
+      Presidente <span>ACM RAS UNSA 2026</span>  ·  Co-fundador <span>Auroboros</span>  ·  CIO <span>NextTrip</span>
+    </p>
+    <div class="hero-badges">
+      <span class="badge badge-blue">Ing. Sistemas — UNSA</span>
+      <span class="badge badge-blue">Electrónica — TECSUP</span>
+      <span class="badge badge-green">🏆 GreenTech Challenge 1° Puesto</span>
+      <span class="badge badge-purple">Global Game Jam 2026</span>
+      <span class="badge badge-blue">Inglés B1 cert. / B2 en curso</span>
+    </div>
+    <div class="hero-ctas">
+      <a href="CV_Edson_Subia_Final_2025.docx" class="btn btn-primary" download>↓ Descargar CV</a>
+      <a href="https://github.com/Q3son" target="_blank" class="btn btn-secondary">⌥ GitHub</a>
+      <a href="#contacto" class="btn btn-secondary">→ Contacto</a>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<section style="padding-top: 0;">
+  <div class="stats-grid reveal">
+    <div class="stat"><span class="stat-number">2</span><div class="stat-label">Ecosistemas fundados</div></div>
+    <div class="stat"><span class="stat-number">3</span><div class="stat-label">Concursos internacionales</div></div>
+    <div class="stat"><span class="stat-number">1°</span><div class="stat-label">GreenTech Challenge</div></div>
+    <div class="stat"><span class="stat-number">10+</span><div class="stat-label">Lenguajes & frameworks</div></div>
+    <div class="stat"><span class="stat-number">2</span><div class="stat-label">Carreras en paralelo</div></div>
+  </div>
+</section>
+
+<!-- PROYECTOS -->
+<section id="proyectos">
+  <div class="section-label">Proyectos</div>
+  <h2>Lo que he construido</h2>
+
+  <div class="projects-grid">
+
+    <!-- NEXTTRIP -->
+    <div class="project-card featured reveal">
+      <div class="project-year">2024 — 2025 · Hult Prize UCSUR</div>
+      <div class="project-title">NextTrip</div>
+      <div class="project-role">CIO (Chief Information Officer) & Co-fundador</div>
+      <div class="project-award">🏆 1° Puesto — GreenTech Challenge · Oracle · UTEC Ventures · SENAJU · LACCEI</div>
+      <div class="project-desc">
+        Ecosistema de gestión turística inteligente con NFC + arquitectura offline-first para registro real de visitantes en destinos sin conectividad (Cusco, Machu Picchu). Panel de datos en tiempo real para gestores, operadores y comunidades. Convierte destinos fragmentados en infraestructuras medibles y sostenibles.
+      </div>
+      <div class="project-tags">
+        <span class="tag">NFC</span><span class="tag">Offline-first</span><span class="tag">IoT</span>
+        <span class="tag">Panel de datos</span><span class="tag">EdTech</span><span class="tag">Jaku</span>
+      </div>
+    </div>
+
+    <!-- AUROBOROS -->
+    <div class="project-card reveal">
+      <div class="project-year">2024 — presente</div>
+      <div class="project-title">Auroboros</div>
+      <div class="project-role">Co-fundador del Ecosistema</div>
+      <div class="project-desc">
+        Ecosistema tecnológico con múltiples verticales: Auroboros Tech (smartphone funcional con ESP32 + LoRaWAN, menos de S/300 para zonas rurales), Auroboros Learning (plataforma educativa) y Auroboros Cloud.
+      </div>
+      <div class="project-tags">
+        <span class="tag">ESP32</span><span class="tag">LoRaWAN</span><span class="tag">EdTech</span>
+        <span class="tag">Hack4edu 2025</span><span class="tag">Kaman</span><span class="tag">Jaku</span>
+      </div>
+    </div>
+
+    <!-- HALL OF MASKS -->
+    <div class="project-card reveal">
+      <div class="project-year">Enero 2026 · Global Game Jam</div>
+      <div class="project-title">Hall of Masks</div>
+      <div class="project-role">Project/Product Manager · Líder · Desarrollador</div>
+      <div class="project-desc">
+        Videojuego desarrollado en 48 horas en el evento de game jam internacional más grande del mundo. Hecho con Godot (GDScript). En desarrollo continuo con apoyo de incubadora Kaman.
+      </div>
+      <div class="project-tags">
+        <span class="tag">Godot</span><span class="tag">GDScript</span><span class="tag">Game Design</span>
+        <span class="tag">Narrativa</span><span class="tag">Kaman</span>
+      </div>
+      <div class="project-links">
+        <a href="https://globalgamejam.org/games/2026/hall-masks-3" target="_blank" class="project-link">→ Ver en GGJ</a>
+        <a href="https://github.com/dev1d123/GGJ2026" target="_blank" class="project-link">→ Repositorio</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">Habilidades</div>
+  <h2>Stack técnico</h2>
+  <div class="skills-grid reveal">
+    <div class="skill-group">
+      <div class="skill-group-title">Lenguajes</div>
+      <div class="skill-list">
+        <span class="skill-item">Python</span><span class="skill-item">Java</span>
+        <span class="skill-item">C++</span><span class="skill-item">JavaScript</span>
+        <span class="skill-item">Perl</span><span class="skill-item">PHP</span>
+        <span class="skill-item">SQL</span><span class="skill-item">HTML/CSS</span>
+        <span class="skill-item">GDScript</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Full Stack & Frameworks</div>
+      <div class="skill-list">
+        <span class="skill-item">Node.js</span><span class="skill-item">Django</span>
+        <span class="skill-item">APIs REST</span><span class="skill-item">WordPress</span>
+        <span class="skill-item">Vercel</span><span class="skill-item">Edusoft</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">DevOps & Herramientas</div>
+      <div class="skill-list">
+        <span class="skill-item">Git</span><span class="skill-item">GitHub</span>
+        <span class="skill-item">Docker</span><span class="skill-item">Visual Studio</span>
+        <span class="skill-item">AutoCAD</span><span class="skill-item">CorelDRAW</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">IoT & Hardware</div>
+      <div class="skill-list">
+        <span class="skill-item">ESP32</span><span class="skill-item">LoRaWAN</span>
+        <span class="skill-item">Arduino</span><span class="skill-item">Raspberry Pi</span>
+        <span class="skill-item">NFC</span><span class="skill-item">Offline-first</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Automatización</div>
+      <div class="skill-list">
+        <span class="skill-item">n8n</span><span class="skill-item">CRM</span>
+        <span class="skill-item">Flujos de trabajo</span><span class="skill-item">Integración de sistemas</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Intereses activos</div>
+      <div class="skill-list">
+        <span class="skill-item">IA</span><span class="skill-item">Ciencia de Datos</span>
+        <span class="skill-item">Ciberseguridad</span><span class="skill-item">Robótica</span>
+        <span class="skill-item">Mecatrónica</span><span class="skill-item">Biotecnología</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCIA -->
+<section id="experiencia">
+  <div class="section-label">Trayectoria</div>
+  <h2>Investigación & Experiencia</h2>
+  <div class="exp-list reveal">
+    <div class="exp-item">
+      <div>
+        <div class="exp-title">Investigador — CiTeSoft UNSA</div>
+        <div class="exp-org">Centro I+D+i acreditado por CONCYTEC</div>
+        <div class="exp-desc">Investigación aplicada en IA, IoT, tecnologías emergentes y seguridad de la información. Único centro acreditado por CONCYTEC fuera de Lima en su categoría.</div>
+      </div>
+      <div class="exp-date">2024 — presente</div>
+    </div>
+    <div class="exp-item">
+      <div>
+        <div class="exp-title">Presidente — ACM RAS UNSA</div>
+        <div class="exp-org">Association for Computing Machinery · Robotics & Automation Society</div>
+        <div class="exp-desc">Liderazgo del comité estudiantil de robótica y automatización. Organización de talleres técnicos y actividades académicas.</div>
+      </div>
+      <div class="exp-date">2026</div>
+    </div>
+    <div class="exp-item">
+      <div>
+        <div class="exp-title">Profesor & Soporte Tecnológico</div>
+        <div class="exp-org">Academia Preuniversitaria Mendel — Arequipa</div>
+        <div class="exp-desc">Docencia en cursos técnicos y de sistemas. Soporte tecnológico a infraestructura educativa.</div>
+      </div>
+      <div class="exp-date">Ene — Mar 2024</div>
+    </div>
+    <div class="exp-item">
+      <div>
+        <div class="exp-title">Asesor de Ventas & Operaciones</div>
+        <div class="exp-org">Trading Fashion Line – Topitop</div>
+        <div class="exp-desc">Gestión de distribución y reposición en retail de alto volumen.</div>
+      </div>
+      <div class="exp-date">Nov 2024 — Ene 2025</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="section-label">Contacto</div>
+  <h2>Hablemos</h2>
+  <div class="contact-grid reveal">
+    <a href="mailto:esubiahu@unsa.edu.pe" class="contact-item">
+      <div class="contact-label">Email institucional</div>
+      <div class="contact-value">esubiahu@unsa.edu.pe</div>
+      <div class="contact-arrow">→ Escribir</div>
+    </a>
+    <a href="https://github.com/Q3son" target="_blank" class="contact-item">
+      <div class="contact-label">GitHub</div>
+      <div class="contact-value">github.com/Q3son</div>
+      <div class="contact-arrow">→ Ver repos</div>
+    </a>
+    <a href="tel:+51953597691" class="contact-item">
+      <div class="contact-label">Celular</div>
+      <div class="contact-value">+51 953 597 691</div>
+      <div class="contact-arrow">→ Llamar</div>
+    </a>
+    <a href="CV_Edson_Subia_Final_2025.docx" class="contact-item" download>
+      <div class="contact-label">Currículum Vitae</div>
+      <div class="contact-value">CV_Edson_Subia_2025</div>
+      <div class="contact-arrow">↓ Descargar .docx</div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Edson Fabricio Subia Huaicane · Arequipa, Perú · esubiahu@unsa.edu.pe</p>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 4 + 'px';
+    cursor.style.top = my - 4 + 'px';
+  });
+
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx - 16 + 'px';
+    ring.style.top = ry - 16 + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => obs.observe(el));
+
+  // HERO immediate reveal
+  document.querySelector('.hero-content').style.opacity = '1';
+</script>
+</body>
+</html>
