@@ -89,6 +89,18 @@
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--accent); }
+  .nav-links { align-items: center; }
+  .lang-btn {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em;
+    color: var(--bg); background: var(--accent); border: none; border-radius: 2px;
+    padding: 6px 12px; cursor: pointer; min-height: 32px;
+  }
+  .lang-btn:hover { background: #fff; }
+  @media (max-width: 640px) {
+    nav { padding: 16px 20px; }
+    .nav-links { gap: 14px; }
+    .nav-links a { font-size: 0.65rem; }
+  }
 
   /* HERO */
   .hero {
@@ -395,6 +407,7 @@
     <a href="#skills">Skills</a>
     <a href="#experiencia">Exp.</a>
     <a href="#contacto">Contacto</a>
+    <button id="langToggle" class="lang-btn" type="button" aria-label="Switch to English">EN</button>
   </div>
 </nav>
 
@@ -825,5 +838,6 @@
   // HERO immediate reveal
   document.querySelector('.hero-content').style.opacity = '1';
 </script>
+<script src="i18n.js"></script>
 </body>
 </html>
